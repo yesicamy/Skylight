@@ -22,15 +22,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.runtime.LaunchedEffect
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.skylight.ui.theme.SkylightTheme
-import org.w3c.dom.Text
-
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.collectAsState
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,7 +73,14 @@ fun TopBanner(title: String, modifier: Modifier = Modifier){
 }
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier){
+fun HomeScreen(modifier: Modifier = Modifier, viewModel: WeatherViewModel = viewModel()){
+    val weather by viewModel.weatherData.collectAsState()
+    val apiKey = BuildConfig.OPENWEATHER_API_KEY
+
+    LaunchedEffect(Unit) {
+        viewModel.fetchWeather("Chicago")
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -80,13 +88,14 @@ fun HomeScreen(modifier: Modifier = Modifier){
         horizontalAlignment = Alignment.CenterHorizontally
 
         ){
-
-        Text(text = stringResource(R.string.loc), fontSize = 24.sp)
+            if (weather != null) {
+                weather?.let{Text(text = stringResource(R.string.loc, it.cityName), fontSize = 24.sp)}
+            }
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Row {
-            Text(text = stringResource(R.string.temp), fontSize = 64.sp)
+            weather?.let { Text(text = stringResource(R.string.temp, it.main.temp), fontSize = 64.sp)}
             Image(
                 painter = painterResource(id = R.drawable.sunny64),
                 contentDescription = "Sunny Weather Icon",
@@ -96,18 +105,20 @@ fun HomeScreen(modifier: Modifier = Modifier){
 
         Row{
             Spacer(modifier = Modifier.width(12.dp))
-            Text(text = stringResource(R.string.feels_like), modifier = Modifier.weight(1f))
+            weather?.let {Text(text = stringResource(R.string.feels_like, it.main.feelsLike), modifier = Modifier.weight(1f))}
             Spacer(modifier = Modifier.weight(1f))
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Row{
-            Column(modifier = Modifier.weight(1f)) {
-                Text(text = stringResource(R.string.low_temp))
-                Text(text = stringResource(R.string.high_temp))
-                Text(text = stringResource(R.string.humidity))
-                Text(text = stringResource(R.string.pressure))
+            weather?.let {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(text = "Low Temp: ${it.main.lowTemp}°F")
+                    Text(text = "High Temp: ${it.main.highTemp}°F")
+                    Text(text = "Pressure: ${it.main.pressure} hPa")
+                    Text(text = "Humidity: ${it.main.humidity}%")
+                }
             }
         }
 
@@ -116,7 +127,7 @@ fun HomeScreen(modifier: Modifier = Modifier){
 
 @Preview(showBackground = true)
 @Composable
-fun HomeScreen() {
+fun HomeScreenPreview() {
     SkylightTheme {
         HomeScreen()
     }

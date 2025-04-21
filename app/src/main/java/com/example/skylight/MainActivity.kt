@@ -112,11 +112,13 @@ fun HomeScreen(modifier: Modifier = Modifier, viewModel: WeatherViewModel = view
         Spacer(modifier = Modifier.height(16.dp))
 
         Row{
-            Column(modifier = Modifier.weight(1f)) {
-                Text(text = stringResource(R.string.low_temp))
-                Text(text = stringResource(R.string.high_temp))
-                Text(text = stringResource(R.string.humidity))
-                Text(text = stringResource(R.string.pressure))
+            weather?.let {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(text = "Low Temp: ${it.main.lowTemp}°F")
+                    Text(text = "High Temp: ${it.main.highTemp}°F")
+                    Text(text = "Pressure: ${it.main.pressure} hPa")
+                    Text(text = "Humidity: ${it.main.humidity}%")
+                }
             }
         }
 

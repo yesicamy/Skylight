@@ -19,8 +19,8 @@ data class WeatherResponse(
 data class Main(
     @SerialName("temp") val temp: Double,
     @SerialName("feels_like") val feelsLike : Double,
-    @SerialName("low_temp") val lowTemp : Double,
-    @SerialName("high_temp") val highTemp : Double,
+    @SerialName("temp_min") val lowTemp : Double,
+    @SerialName("temp_max") val highTemp : Double,
     val pressure : Int,
     val humidity : Int
 )

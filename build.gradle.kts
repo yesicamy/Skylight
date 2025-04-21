@@ -4,3 +4,13 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.kotlin.compose) apply false
 }
+
+subprojects {
+    afterEvaluate {
+        if (project.name == "Skylight"){
+            apply(plugin = "com.android.application")
+            apply(plugin = "org.jetbrains.kotlin.android")
+            apply(plugin = "org.jetbrains.kotlin.plugin.compose")
+        }
+    }
+}

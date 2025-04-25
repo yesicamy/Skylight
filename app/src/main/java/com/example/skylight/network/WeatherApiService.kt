@@ -12,8 +12,15 @@ import okhttp3.MediaType.Companion.toMediaType
 @Serializable
 data class WeatherResponse(
     @SerialName("name") val cityName: String,
-    @SerialName("main") val main: Main
+    @SerialName("main") val main: Main,
+    @SerialName("weather") val weather: List<WeatherDescription>
 )
+
+@Serializable
+data class WeatherDescription(
+    @SerialName("icon") val icon: String
+)
+
 
 @Serializable
 data class Main(
@@ -32,6 +39,14 @@ interface WeatherApiService {
         @Query("appid") apiKey: String,
         @Query("units") units: String = "imperial"
     ): WeatherResponse
+
+    @GET("forecast/daily")
+    suspend fun getForecast(
+        @Query("q") city: String,
+        @Query("appid") apiKey: String,
+        @Query("units") units: String = "imperial",
+        @Query("cnt") count: Int = 16 // Fetch 16 days forecast
+    ): ForecastResponse
 }
 object WeatherApi {
     private const val BASE_URL = "https://api.openweathermap.org/data/2.5/"

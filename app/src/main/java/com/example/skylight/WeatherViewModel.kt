@@ -13,7 +13,6 @@ class WeatherViewModel : ViewModel() {
     val weatherData: StateFlow<WeatherResponse?> = _weatherData
 
     private val _errorMessage = MutableStateFlow<String?>("No Errors")
-    val errorMessage: StateFlow<String?> = _errorMessage
 
     fun fetchWeather(city: String) {
         val apiKey = BuildConfig.OPENWEATHER_API_KEY

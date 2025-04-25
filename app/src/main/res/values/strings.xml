@@ -7,4 +7,9 @@
     <string name="high_temp">High %1$.0f°</string>
     <string name="humidity">Humidity %1$d%%</string>
     <string name="pressure">Pressure %1$d hPa</string>
+    <string name="wind_speed">Wind: %1$.1f mph</string>
+    <string name="enter_zip">Enter ZIP Code</string>
+    <string name="get_forecast">Get Forecast</string>
+    <string name="see_forecast">16-Day Forecast</string>
+    <string name="error_invalid_zip">Invalid ZIP code. Please try again.</string>
 </resources>

@@ -18,6 +18,8 @@ data class WeatherResponse(
 
 @Serializable
 data class WeatherDescription(
+    @SerialName("main") val main: String,
+    @SerialName("description") val description: String,
     @SerialName("icon") val icon: String
 )
 
